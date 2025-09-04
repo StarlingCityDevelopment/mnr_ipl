@@ -1,47 +1,49 @@
-local entitysets = lib.load("config.entitysets")
-local ipl = lib.load("config.ipl")
-local zones = lib.load("config.zones")
+local ipl = require 'config.ipl'
+local zones = lib.load('config.zones')
+local entitysets = lib.load('config.entitysets')
 
-local function UnloadIPL(iplList)
-    for _, iplName in ipairs(ipl[iplList]) do
-        RemoveIpl(iplName)
+local function unloadIpl(self)
+    local iplList = ipl[self.name]
+    if not iplList then return end
+
+    for _, name in ipairs(iplList) do
+        RemoveIpl(name)
     end
 end
 
-local function LoadIPL(iplList)
-    for _, iplName in ipairs(ipl[iplList]) do
-        RequestIpl(iplName)
+local function loadIpl(self)
+    local iplList = ipl[self.name]
+    if not iplList then return end
+
+    for _, name in ipairs(iplList) do
+        RequestIpl(name)
     end
 end
 
-local function CreateIPLZone(zoneData)
-    local zone = lib.zones.box({
-        coords = vec3(zoneData.coords.x, zoneData.coords.y, zoneData.coords.z),
-        size = zoneData.size,
-        rotation = zoneData.coords.w,
-        onEnter = function()
-            LoadIPL(zoneData.ipl)
-        end,
-        onExit = function()
-            UnloadIPL(zoneData.ipl)
-        end,
-        debug = zoneData.debug,
+local function createZone(name, data)
+    lib.zones.box({
+        name = name,
+        coords = data.coords,
+        size = data.size,
+        rotation = data.rotation,
+        debug = data.debug,
+        onEnter = loadIpl,
+        onExit = unloadIpl,
     })
 end
 
-local function EditEntitySet(mapName, setName, action)
-    local iplList = entitysets[mapName][setName]
+RegisterNetEvent('mnr_ipl:client:EditEntitySet', function(map, name, action)
+    if GetInvokingResource() then return end
+    
+    local set = entitysets[map][name]
+    if not set then return end
 
-    if not iplList then return end
-
-    if action == "load" then
-        LoadIPL(iplList)
-    elseif action == "unload" then
-        UnloadIPL(iplList)
+    if action == 'load' then
+        loadIpl({ name = set })
+    elseif action == 'unload' then
+        unloadIpl({ name = set })
     end
-end
-
-RegisterNetEvent("mnr_ipl:client:EditEntitySet", EditEntitySet)
+end)
 
 for _, iplList in pairs(ipl) do
     for _, iplName in ipairs(iplList) do
@@ -49,10 +51,11 @@ for _, iplList in pairs(ipl) do
     end
 end
 
-for _, zoneData in pairs(zones) do
-    CreateIPLZone(zoneData)
+for name, data in pairs(zones) do
+    createZone(name, data)
 end
 
-for _, entityData in pairs(entitysets) do
-    LoadIPL(entityData["default"])
+for _, data in pairs(entitysets) do
+    local set = data['default']
+    loadIpl({ name = set })
 end
