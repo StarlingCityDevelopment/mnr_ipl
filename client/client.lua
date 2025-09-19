@@ -1,5 +1,6 @@
 local ipl = require 'config.ipl'
 local zones = lib.load('config.zones')
+local disable = lib.load('config.disable')
 local entitysets = lib.load('config.entitysets')
 
 local function unloadIpl(self)
@@ -53,6 +54,10 @@ end
 
 for name, data in pairs(zones) do
     createZone(name, data)
+end
+
+for _, data in ipairs(disable) do
+    DisableInterior(data.id, data.disable)
 end
 
 for _, data in pairs(entitysets) do
