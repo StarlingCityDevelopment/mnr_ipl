@@ -11,7 +11,7 @@ return {
     { id = 200961, disable = false },               --- Sandy Shores    | Algonquin Boulevard       | coords: 1699.7914, 3750.7307, 34.3718
     { id = 175617, disable = false },               --- Sandy Shores    | Route 68                  | coords: -1111.4142, 2688.8916, 18.5997
     { id = 180481, disable = false },               --- Paleto Bay      | Great Ocean Highway       | coords: -323.0224, 6073.8945, 31.2306
-    
+
     ---@description Fleeca Bank Interiors
     { id = 137985, disable = false },               --- Los Santos      | Vespucci Boulevard        | coords: 151.3034, -1036.2970, 29.3392
     { id = 234241, disable = false },
@@ -19,10 +19,10 @@ return {
     { id = 165121, disable = false },
     { id = 174849, disable = false },
     { id = 201985, disable = false },               --- Sandy Shores    | Route 68                  | coords: 1175.1665, 2701.2539, 38.1727
-    
+
     ---@description Pillbox Hospital IPL
     { ipl = 'rc12b_default', disable = false },
-    
+
     ---@description Trevor Trailer Interior
     { id = 2562, disable = false },
 }
