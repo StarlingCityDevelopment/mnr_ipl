@@ -18,6 +18,8 @@ return {
     { id = 165121, disable = false },
     { id = 174849, disable = false },
     { id = 201985, disable = false },
+    -- Pillbox Hospital
+    { ipl = 'rc12b_default', disable = false },
     -- Trevor Trailer
     { id = 2562, disable = false },
 }

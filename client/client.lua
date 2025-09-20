@@ -57,7 +57,13 @@ for name, data in pairs(zones) do
 end
 
 for _, data in ipairs(disable) do
-    DisableInterior(data.id, data.disable)
+    if data.id and data.disable then
+        DisableInterior(data.id, data.disable)
+    end
+
+    if data.ipl and data.disable then
+        RemoveIpl(data.ipl)
+    end
 end
 
 for _, data in pairs(entitysets) do
