@@ -1,7 +1,8 @@
+local static = lib.load('config.static')
+
 local ipl = require 'config.ipl'
 local zones = lib.load('config.zones')
 local disable = lib.load('config.disable')
-local entitysets = lib.load('config.entitysets')
 
 local function unloadIpl(self)
     local iplList = ipl[self.name]
@@ -36,7 +37,7 @@ end
 RegisterNetEvent('mnr_ipl:client:EditEntitySet', function(map, name, action)
     if GetInvokingResource() then return end
     
-    local set = entitysets[map][name]
+    local set = static[map][name]
     if not set then return end
 
     if action == 'load' then
@@ -66,7 +67,7 @@ for _, data in ipairs(disable) do
     end
 end
 
-for _, data in pairs(entitysets) do
+for _, data in pairs(static) do
     local set = data['default']
     loadIpl({ name = set })
 end
