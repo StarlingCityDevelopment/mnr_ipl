@@ -25,6 +25,7 @@ return {
     { id = 155905, disable = false },               --- Los Santos      | Mirror Park               |
     { id = 171009, disable = false },               --- Los Santos      | Vespucci                  |
     { id = 140545, disable = false },               --- Los Santos      | Vinewood                  |
+    { id = 199937, disable = false },               --- Sandy           | There's only one          |
     { id = 180225, disable = false },               --- Paleto          | There's only one          |
 
     ---@description Pillbox Hospital IPL
