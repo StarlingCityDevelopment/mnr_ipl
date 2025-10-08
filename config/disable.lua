@@ -20,6 +20,13 @@ return {
     { id = 174849, disable = false },
     { id = 201985, disable = false },               --- Sandy Shores    | Route 68                  | coords: 1175.1665, 2701.2539, 38.1727
     
+    ---@description Barbers Interiors (Only needed ones)
+    { id = 198657, disable = false },               --- Los Santos      | South Side                |
+    { id = 155905, disable = false },               --- Los Santos      | Mirror Park               |
+    { id = 171009, disable = false },               --- Los Santos      | Vespucci                  |
+    { id = 140545, disable = false },               --- Los Santos      | Vinewood                  |
+    { id = 180225, disable = false },               --- Paleto          | There's only one          |
+
     ---@description Pillbox Hospital IPL
     { ipl = 'rc12b_default', disable = false },
     
