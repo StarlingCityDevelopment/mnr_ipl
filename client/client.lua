@@ -34,19 +34,6 @@ local function createZone(name, data)
     })
 end
 
-RegisterNetEvent('mnr_ipl:client:EditEntitySet', function(map, name, action)
-    if GetInvokingResource() then return end
-    
-    local set = static[map][name]
-    if not set then return end
-
-    if action == 'load' then
-        loadIpl({ name = set })
-    elseif action == 'unload' then
-        unloadIpl({ name = set })
-    end
-end)
-
 for _, iplList in pairs(ipl) do
     for _, iplName in ipairs(iplList) do
         RemoveIpl(iplName)
@@ -67,7 +54,32 @@ for _, data in ipairs(disable) do
     end
 end
 
-for _, data in pairs(static) do
-    local set = data['default']
-    loadIpl({ name = set })
+local function loadDefault(ipls)
+    for name, data in pairs(ipls) do
+        if data.default then
+            RequestIpl(data.ipl)
+        end
+    end
 end
+
+for name, data in pairs(static) do
+    loadDefault(data)
+end
+
+RegisterNetEvent('mnr_ipl:client:ToggleMapIpl', function(data)
+    if GetInvokingResource() then return end
+    
+    local ipl = static[data.mapName][data.iplName].ipl
+
+    if not ipl then
+        return
+    end
+
+    local isLoaded = IsIplActive(ipl)
+
+    if data.action == 'load' and not isLoaded then
+        RequestIpl(ipl)
+    elseif data.action == 'unload' and isLoaded then
+        RemoveIpl(ipl)
+    end
+end)

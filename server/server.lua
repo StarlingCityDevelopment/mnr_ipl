@@ -1,31 +1,13 @@
-lib.addCommand('entityset', {
-    help = 'Loads an entityset for a map',
+lib.addCommand('toggleipl', {
+    help = 'Toggles an IPL of a map',
     params = {
-        {
-            name = 'mapName',
-            type = 'string',
-            help = 'Name of the map',
-        },
-        {
-            name = 'setName',
-            type = 'string',
-            help = 'Name of the EntitySet to load',
-        },
-        {
-            name = 'action',
-            type = 'string',
-            help = 'Action to perform (load/unload)',
-        },
+        { name = 'mapName', type = 'string', help = 'Name of the map' },
+        { name = 'iplName', type = 'string', help = 'Name of the IPL' },
+        { name = 'action', type = 'string', help = 'load/unload' },
     },
     restricted = 'group.admin',
 }, function(source, args, raw)
-    local mapName = args.mapName
-    local entitySet = args.setName
-    local action = args.action
+    if not args.mapName or not args.iplName or not args.action then return end
 
-    if not mapName or not entitySet or not action then
-        return
-    end
-
-    TriggerClientEvent('mnr_ipl:client:EditEntitySet', -1, mapName, entitySet, action)
+    TriggerClientEvent('mnr_ipl:client:ToggleMapIpl', -1, args)
 end)
