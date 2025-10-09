@@ -1,49 +1,8 @@
+local dynamic = require 'config.dynamic'
+local disable = lib.load('config.disable')
 local static = lib.load('config.static')
 
-local ipl = require 'config.ipl'
-local zones = lib.load('config.zones')
-local disable = lib.load('config.disable')
-
-local function unloadIpl(self)
-    local iplList = ipl[self.name]
-    if not iplList then return end
-
-    for _, name in ipairs(iplList) do
-        RemoveIpl(name)
-    end
-end
-
-local function loadIpl(self)
-    local iplList = ipl[self.name]
-    if not iplList then return end
-
-    for _, name in ipairs(iplList) do
-        RequestIpl(name)
-    end
-end
-
-local function createZone(name, data)
-    lib.zones.box({
-        name = name,
-        coords = data.coords,
-        size = data.size,
-        rotation = data.rotation,
-        debug = data.debug,
-        onEnter = loadIpl,
-        onExit = unloadIpl,
-    })
-end
-
-for _, iplList in pairs(ipl) do
-    for _, iplName in ipairs(iplList) do
-        RemoveIpl(iplName)
-    end
-end
-
-for name, data in pairs(zones) do
-    createZone(name, data)
-end
-
+---@description Vanilla Interior/IPL disabler
 for _, data in ipairs(disable) do
     if data.id and data.disable then
         DisableInterior(data.id, data.disable)
@@ -54,9 +13,50 @@ for _, data in ipairs(disable) do
     end
 end
 
+---@description Dynamic IPL loading section
+local function cleanIpls(group)
+    for _, ipl in ipairs(group) do
+        if IsIplActive(ipl) then
+            RemoveIpl(ipl)
+        end
+    end
+end
+
+local function toggleDynamicIpl(group, inside)
+    for _, name in ipairs(group) do
+        if inside then
+            RequestIpl(name)
+        elseif not inside then
+            RemoveIpl(name)
+        end
+    end
+end
+
+local function createZone(data)
+    cleanIpls(data.ipl)
+
+    lib.zones.box({
+        coords = data.coords,
+        size = data.size,
+        rotation = data.rotation,
+        debug = data.debug,
+        onEnter = function(self)
+            toggleDynamicIpl(data.ipl, true)
+        end,
+        onExit = function(self)
+            toggleDynamicIpl(data.ipl, false)
+        end,
+    })
+end
+
+for _, data in pairs(dynamic) do
+    createZone(data)
+end
+
+---@description Static IPL default loading
 local function loadDefault(ipls)
     for name, data in pairs(ipls) do
-        if data.default then
+        if data.default and not IsIplActive(data.ipl) then
             RequestIpl(data.ipl)
         end
     end
@@ -66,6 +66,7 @@ for name, data in pairs(static) do
     loadDefault(data)
 end
 
+---@description Static IPL command section
 RegisterNetEvent('mnr_ipl:client:ToggleMapIpl', function(data)
     if GetInvokingResource() then return end
     
