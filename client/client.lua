@@ -1,5 +1,6 @@
 local dynamic = require 'config.dynamic'
 local disable = lib.load('config.disable')
+local entitysets = lib.load('config.entitysets')
 local static = lib.load('config.static')
 
 ---@description Vanilla Interior/IPL disabler
@@ -84,3 +85,21 @@ RegisterNetEvent('mnr_ipl:client:ToggleMapIpl', function(data)
         RemoveIpl(ipl)
     end
 end)
+
+---@description [BETA] EntitySets loader section
+local function editEntitySet(interiorId, data)
+    for _, entityset in pairs(data) do
+        local isActive = IsInteriorEntitySetActive(interiorId, entityset.name)
+        if entityset.enable and not isActive then
+            ActivateInteriorEntitySet(interiorId, entityset.name)
+        elseif not entityset.enable and isActive then
+            DeactivateInteriorEntitySet(interiorId, entityset.name)
+        end
+    end
+end
+
+for code, data in pairs(entitysets) do
+    if not IsValidInterior(code) then return end
+
+    editEntitySet(code, data)
+end
