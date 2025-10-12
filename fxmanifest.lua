@@ -8,6 +8,10 @@ author 'IlMelons'
 version '1.0.0'
 repository 'https://github.com/Monarch-Development/mnr_ipl'
 
+files {
+    'config/*.lua',
+}
+
 shared_scripts {
     '@ox_lib/init.lua',
 }
@@ -18,8 +22,4 @@ client_scripts {
 
 server_scripts {
     'server/*.lua',
-}
-
-files {
-    'config/*.lua',
 }
