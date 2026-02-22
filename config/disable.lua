@@ -28,6 +28,10 @@ return {
     { id = 199937, disable = false },               --- Sandy           | There's only one          |
     { id = 180225, disable = false },               --- Paleto          | There's only one          |
 
+    ---@description MRPD
+    { ipl = 'hei_heist_police_dlc', disable = false },
+    { ipl = 'v_policehub', disable = false },
+
     ---@description Pillbox Hospital IPL
     { ipl = 'rc12b_default', disable = false },
 
